@@ -23,4 +23,16 @@ const CITIES_NAMES = [
   'Tynda'
 ];
 
-export { DESCRIPTION, CITIES_NAMES};
+const POINT_TYPES = [
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'chech-in',
+  'sightseeing',
+  'restaurant'
+];
+
+export { DESCRIPTION, CITIES_NAMES, POINT_TYPES };

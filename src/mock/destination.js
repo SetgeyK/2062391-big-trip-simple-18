@@ -15,7 +15,7 @@ const generateName = () => {
 
 
 export const generateDestination = () => ({
-  id: 1,
+  id: getRandomInteger(0, 15),
   description: generateDescription(),
   name: generateName(),
   pictures: [

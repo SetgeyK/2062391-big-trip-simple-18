@@ -1,8 +1,18 @@
 import { createElement } from '../render';
 import dayjs from 'dayjs';
 
+/*
+const renderOffer = (point) => `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
+    <label class="event__offer-label" for="event-offer-comfort-1">
+      <span class="event__offer-title">${point.offers[1].title}</span>
+      +€&nbsp;
+      <span class="event__offer-price">${point.offers[1].price}</span>
+    </label>
+  </div>`;
+*/
 const createEditFormTemplate = (point, destination) => {
-  const { dateFrom, dateTo, basePrice, type } = point;
+  const { dateFrom, dateTo, basePrice, offersByType } = point;
   const { name, description } = destination;
 
   return (`
@@ -70,7 +80,7 @@ const createEditFormTemplate = (point, destination) => {
 
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">
-                      ${type}
+                      ${offersByType.type}
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
                     <datalist id="destination-list-1">
@@ -105,53 +115,30 @@ const createEditFormTemplate = (point, destination) => {
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-                    <div class="event__available-offers">
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
-                        <label class="event__offer-label" for="event-offer-luggage-1">
-                          <span class="event__offer-title">Add luggage</span>
-                          +€&nbsp;
-                          <span class="event__offer-price">50</span>
-                        </label>
-                      </div>
-
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
-                        <label class="event__offer-label" for="event-offer-comfort-1">
-                          <span class="event__offer-title">Switch to comfort</span>
-                          +€&nbsp;
-                          <span class="event__offer-price">80</span>
-                        </label>
-                      </div>
-
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-                        <label class="event__offer-label" for="event-offer-meal-1">
-                          <span class="event__offer-title">Add meal</span>
-                          +€&nbsp;
-                          <span class="event__offer-price">15</span>
-                        </label>
-                      </div>
-
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-                        <label class="event__offer-label" for="event-offer-seats-1">
-                          <span class="event__offer-title">Choose seats</span>
-                          +€&nbsp;
-                          <span class="event__offer-price">5</span>
-                        </label>
-                      </div>
-
-                      <div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-                        <label class="event__offer-label" for="event-offer-train-1">
-                          <span class="event__offer-title">Travel by train</span>
-                          +€&nbsp;
-                          <span class="event__offer-price">40</span>
-                        </label>
-                      </div>
+                    <div class="event__offer-selector">
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
+                      <label class="event__offer-label" for="event-offer-comfort-1">
+                        <span class="event__offer-title">${offersByType.offers[1].title}</span>
+                      +€&nbsp;
+                        <span class="event__offer-price">${offersByType.offers[1].price}</span>
+                      </label>
                     </div>
+                    <div class="event__offer-selector">
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
+                      <label class="event__offer-label" for="event-offer-seats-1">
+                       <span class="event__offer-title">${offersByType.offers[2].title}</span>
+                        +€&nbsp;
+                       <span class="event__offer-price">${offersByType.offers[2].price}</span>
+                      </label>
+                    </div>
+                    <div class="event__offer-selector">
+                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
+                    <label class="event__offer-label" for="event-offer-train-1">
+                      <span class="event__offer-title">${offersByType.offers[3].title}</span>
+                      +€&nbsp;
+                      <span class="event__offer-price">${offersByType.offers[3].price}</span>
+                    </label>
+                  </div>
                   </section>
 
                   <section class="event__section  event__section--destination">
@@ -162,26 +149,30 @@ const createEditFormTemplate = (point, destination) => {
               </form>
             </li>
 `);
-}
+};
 
 export default class EditFormView {
+  #point = null;
+  #destination = null;
+  #element = null;
+
   constructor(point, destination) {
-    this.point = point;
-    this.destination = destination;
+    this.#point = point;
+    this.#destination = destination;
   }
 
-  getTemplate() {
-    return createEditFormTemplate(this.point, this.destination);
+  get template() {
+    return createEditFormTemplate(this.#point, this.#destination);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

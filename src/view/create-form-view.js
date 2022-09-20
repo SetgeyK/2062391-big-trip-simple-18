@@ -11,19 +11,20 @@ const getCreateFormTemplate = () => (`
   `);
 
 export default class CreateFormView {
+  #element = null;
 
-  getTemplate() {
+  get template() {
     return getCreateFormTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

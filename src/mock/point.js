@@ -1,21 +1,7 @@
 import { getRandomInteger } from '../utils';
+import { POINT_TYPES } from './consts';
 import dayjs from 'dayjs';
 
-const generatePointType = () => {
-  const pointType = [
-    'taxi',
-    'us',
-    'train',
-    'ship',
-    'drive',
-    'flight',
-    'chech-in',
-    'sightseeing',
-    'restaurant'
-  ];
-  const randomIndex = getRandomInteger(0, pointType.length - 1);
-  return pointType[randomIndex];
-};
 
 const generateUpgradeTitle = () => {
   const offerUpgrade = [
@@ -34,12 +20,31 @@ export const generatePoint = () => ({
   basePrice: getRandomInteger(300, 1500),
   dateFrom: dayjs().subtract(1, 'day'),
   dateTo: dayjs().add(3, 'hour'),
-  destination: 1,
-  id: 0,
-  offer: {
-    id: getRandomInteger(0, 10),
-    title: generateUpgradeTitle(),
-    price: getRandomInteger(30, 150)
-  },
-  type: generatePointType()
-});
+  destination: getRandomInteger(0, 15),
+  id: getRandomInteger(0, 15),
+  offersByType: {
+    type: POINT_TYPES[getRandomInteger(0, POINT_TYPES.length - 1)],
+    offers:[
+      {
+        id: getRandomInteger(0, 10),
+        title: generateUpgradeTitle(),
+        price: getRandomInteger(30, 150)
+      },
+      {
+        id: getRandomInteger(0, 10),
+        title: generateUpgradeTitle(),
+        price: getRandomInteger(30, 150)
+      },
+      {
+        id: getRandomInteger(0, 10),
+        title: generateUpgradeTitle(),
+        price: getRandomInteger(30, 150)
+      },
+      {
+        id: getRandomInteger(0, 10),
+        title: generateUpgradeTitle(),
+        price: getRandomInteger(30, 150)
+      }
+    ]}
+}
+);
