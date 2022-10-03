@@ -4,11 +4,14 @@ import TripPresenter from './presenter/trip-presenter';
 import { render, RenderPosition } from './render';
 import PointsModel from './model/points-model';
 import DestinationModel from './model/destination-model';
+import OffersModel from './model/offers-model';
 
 const tripMainContainer = document.querySelector('.trip-main');
 const tripEventsContainer = document.querySelector('.trip-events');
 const filtersContainer = document.querySelector('.trip-controls__filters');
-const tripPresenter = new TripPresenter();
+const offersModel = new OffersModel();
+console.log(offersModel)
+const tripPresenter = new TripPresenter(offersModel);
 const pointsModel = new PointsModel();
 const destinationModel = new DestinationModel();
 

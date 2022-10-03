@@ -1,9 +1,18 @@
 import { createElement } from '../render';
 import dayjs from 'dayjs';
 
-
+/*
+const renderOffer = (point) => `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
+    <label class="event__offer-label" for="event-offer-comfort-1">
+      <span class="event__offer-title">${point.offers[1].title}</span>
+      +€&nbsp;
+      <span class="event__offer-price">${point.offers[1].price}</span>
+    </label>
+  </div>`;
+*/
 const createEditFormTemplate = (point, destination) => {
-  const { dateFrom, dateTo, basePrice, offersByType } = point;
+  const { dateFrom, dateTo, basePrice, type, offers } = point;
   const { name, description } = destination;
 
   return (`
@@ -71,7 +80,7 @@ const createEditFormTemplate = (point, destination) => {
 
                   <div class="event__field-group  event__field-group--destination">
                     <label class="event__label  event__type-output" for="event-destination-1">
-                      ${offersByType.type}
+                      ${type}
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
                     <datalist id="destination-list-1">
@@ -109,25 +118,25 @@ const createEditFormTemplate = (point, destination) => {
                     <div class="event__offer-selector">
                       <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
                       <label class="event__offer-label" for="event-offer-comfort-1">
-                        <span class="event__offer-title">${offersByType.offers[1].title}</span>
+                        <span class="event__offer-title"></span>
                       +€&nbsp;
-                        <span class="event__offer-price">${offersByType.offers[1].price}</span>
+                        <span class="event__offer-price"></span>
                       </label>
                     </div>
                     <div class="event__offer-selector">
                       <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
                       <label class="event__offer-label" for="event-offer-seats-1">
-                       <span class="event__offer-title">${offersByType.offers[2].title}</span>
+                       <span class="event__offer-title">${offers.offers.title}</span>
                         +€&nbsp;
-                       <span class="event__offer-price">${offersByType.offers[2].price}</span>
+                       <span class="event__offer-price">${offers.offers.price}</span>
                       </label>
                     </div>
                     <div class="event__offer-selector">
                     <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
                     <label class="event__offer-label" for="event-offer-train-1">
-                      <span class="event__offer-title">${offersByType.offers[3].title}</span>
+                      <span class="event__offer-title">${offers.offers.title}</span>
                       +€&nbsp;
-                      <span class="event__offer-price">${offersByType.offers[3].price}</span>
+                      <span class="event__offer-price">${offers.offers.price}</span>
                     </label>
                   </div>
                   </section>
