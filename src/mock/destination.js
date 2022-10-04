@@ -1,6 +1,7 @@
 import { getRandomInteger } from '../utils';
 import { CITIES_NAMES, DESCRIPTION } from './consts';
 
+
 const generateDescription = () => {
   const randomIndex = getRandomInteger(0, DESCRIPTION.length - 1);
 
