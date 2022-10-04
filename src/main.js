@@ -10,12 +10,11 @@ const tripMainContainer = document.querySelector('.trip-main');
 const tripEventsContainer = document.querySelector('.trip-events');
 const filtersContainer = document.querySelector('.trip-controls__filters');
 const offersModel = new OffersModel();
-console.log(offersModel)
-const tripPresenter = new TripPresenter(offersModel);
+const tripPresenter = new TripPresenter();
 const pointsModel = new PointsModel();
 const destinationModel = new DestinationModel();
 
 render(new CreateFormView(), tripMainContainer, RenderPosition.AFTERBEGIN);
 render(new FilterView(), filtersContainer);
 
-tripPresenter.init(tripEventsContainer, pointsModel, destinationModel);
+tripPresenter.init(tripEventsContainer, pointsModel, destinationModel, offersModel);

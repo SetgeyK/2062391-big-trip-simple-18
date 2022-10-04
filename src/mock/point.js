@@ -39,7 +39,7 @@ const getOffersByType = (offerTypes, type) => {
   const filtredOffer = offerTypes.filter((item) => item.type === type);
   if (filtredOffer[0].offers.length > 0) {
     for (let i = 0; i < getRandomInteger(0, filtredOffer[0].offers.length); i++) {
-      offersArray.push(filtredOffer[0].offers.id);
+      offersArray.push(filtredOffer[0].offers[i].id);
     }
   }
   return offersArray;

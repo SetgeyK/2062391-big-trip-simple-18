@@ -1,26 +1,43 @@
 import dayjs from 'dayjs';
 import { createElement } from '../render';
-import { getRandomInteger } from '../utils';
-import OffersModel from '../model/offers-model';
 
-const offersModel = new OffersModel();
-
-const getOffersByType = (type, offers) => {
+const getOffersByType = (type, offersByType, offerIds) => {
   const offersArray = [];
-  const filtredOffer = offersModel.offers.filter((item) => item.type === type);
-  console.log(filtredOffer);
-  offers.forEach((id) => {
-    const offer = filtredOffer.filter((item) => item.id === id);
-    offersArray.push(offer);
-  });
+  if (offerIds.length > 0) {
+    offerIds.forEach((id) => {
+      const offer = offersByType.filter((item) => item.id === id);
+      if (offer.length > 0) {
+        offersArray.push(offer[0]);
+      }
+    });
+  }
 
   return offersArray;
 };
 
-const createPointTemplate = (point, description, offersModel) => {
-  const { dateFrom, dateTo, basePrice, type, offers } = point;
+const printOffers = (offers) => {
+  let template = '';
+  if (offers.length > 0) {
+    offers.forEach((item) => {
+      template += `<li class="event__offer">
+          <span class="event__offer-title">${item.title}</span>
+          +€&nbsp;
+          <span class="event__offer-price">${item.price}</span>
+        </li>`;
+    });
+  } else {
+    template += `<li class="event__offer">
+      <span class="event__offer-title">No additional offers</span>
+    </li>`;
+  }
+  return template;
+};
+
+
+const createPointTemplate = (point, description, offersByType) => {
+  const { dateFrom, dateTo, basePrice, type } = point;
   const { name } = description;
-  const offersA = getOffersByType(offersModel, type, offers);
+  const offers = getOffersByType(type, offersByType[0].offers, point.offers);
   return (`
 <li class="trip-events__item">
 <div class="event">
@@ -41,11 +58,7 @@ const createPointTemplate = (point, description, offersModel) => {
   </p>
   <h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">
-    <li class="event__offer">
-      <span class="event__offer-title">${type}</span>
-      +€&nbsp;
-      <span class="event__offer-price"></span>
-    </li>
+    ${printOffers(offers)}
   </ul>
   <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
@@ -64,7 +77,7 @@ export default class PointView {
   constructor(point, description, offers) {
     this.#point = point;
     this.#description = description;
-    this.#offers = offers;
+    this.#offers = offers.filter((item) => item.type === this.#point.type);
   }
 
   get template() {

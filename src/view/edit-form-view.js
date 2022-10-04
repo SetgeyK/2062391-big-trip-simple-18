@@ -1,19 +1,45 @@
 import { createElement } from '../render';
 import dayjs from 'dayjs';
 
-/*
-const renderOffer = (point) => `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
-    <label class="event__offer-label" for="event-offer-comfort-1">
-      <span class="event__offer-title">${point.offers[1].title}</span>
-      +€&nbsp;
-      <span class="event__offer-price">${point.offers[1].price}</span>
-    </label>
-  </div>`;
-*/
-const createEditFormTemplate = (point, destination) => {
-  const { dateFrom, dateTo, basePrice, type, offers } = point;
+const getOffersByType = (type, offersByType, offerIds) => {
+  const offersArray = [];
+  if (offerIds.length > 0) {
+    offerIds.forEach((id) => {
+      const offer = offersByType.filter((item) => item.id === id);
+      if (offer.length > 0) {
+        offersArray.push(offer[0]);
+      }
+    });
+  }
+
+  return offersArray;
+};
+
+const printOffers = (offers) => {
+  let template = '';
+  if (offers.length > 0) {
+    offers.forEach((item) => {
+      template += `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${item.title}" type="checkbox" name="event-offer-${item.title}" checked="">
+      <label class="event__offer-label" for="event-offer-${item.title}">
+        <span class="event__offer-title">${item.title}</span>
+        +€&nbsp;
+        <span class="event__offer-price">${item.price}</span>
+      </label>
+    </div>`;
+    });
+  } else {
+    template += `
+      <span class="event__offer-title">No additional offers</span>
+      `;
+  }
+  return template;
+};
+
+const createEditFormTemplate = (point, destination, offersByType) => {
+  const { dateFrom, dateTo, basePrice, type } = point;
   const { name, description } = destination;
+  const offers = getOffersByType(type, offersByType[0].offers, point.offers);
 
   return (`
 <li class="trip-events__item">
@@ -115,30 +141,7 @@ const createEditFormTemplate = (point, destination) => {
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-                    <div class="event__offer-selector">
-                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
-                      <label class="event__offer-label" for="event-offer-comfort-1">
-                        <span class="event__offer-title"></span>
-                      +€&nbsp;
-                        <span class="event__offer-price"></span>
-                      </label>
-                    </div>
-                    <div class="event__offer-selector">
-                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-                      <label class="event__offer-label" for="event-offer-seats-1">
-                       <span class="event__offer-title">${offers.offers.title}</span>
-                        +€&nbsp;
-                       <span class="event__offer-price">${offers.offers.price}</span>
-                      </label>
-                    </div>
-                    <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-                    <label class="event__offer-label" for="event-offer-train-1">
-                      <span class="event__offer-title">${offers.offers.title}</span>
-                      +€&nbsp;
-                      <span class="event__offer-price">${offers.offers.price}</span>
-                    </label>
-                  </div>
+                    ${printOffers(offers)}
                   </section>
 
                   <section class="event__section  event__section--destination">
@@ -155,14 +158,16 @@ export default class EditFormView {
   #point = null;
   #destination = null;
   #element = null;
+  #offers = null;
 
-  constructor(point, destination) {
+  constructor(point, destination, offers) {
     this.#point = point;
     this.#destination = destination;
+    this.#offers = offers.filter((item) => item.type === this.#point.type);
   }
 
   get template() {
-    return createEditFormTemplate(this.#point, this.#destination);
+    return createEditFormTemplate(this.#point, this.#destination, this.#offers);
   }
 
   get element() {

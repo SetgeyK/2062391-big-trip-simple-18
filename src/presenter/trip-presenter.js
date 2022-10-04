@@ -9,25 +9,25 @@ import { render } from '../render';
 export default class TripPresenter {
   #tripContainer = null;
   #pointsModel = null;
+  #offersModel = null;
   #destinationModel = null;
   #points = [];
   #destinations = [];
   #offers = [];
   #pointsListComponent = new PointsListView();
 
-  constuctor(offers) {
-    this.#offers = offers;
-  }
-
-  init = (tripContainer, pointsModel, destinationModel) => {
+  init = (tripContainer, pointsModel, destinationModel, offersModel) => {
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
+    this.#offersModel = offersModel;
     this.#destinationModel = destinationModel;
+
     this.#points = [...this.#pointsModel.points];
     this.#destinations = [...this.#destinationModel.destinations];
+    this.#offers = this.#offersModel.offers;
 
     if (this.#points.length === 0) {
-      render(new NoPointsView, this.#tripContainer);
+      render(new NoPointsView(), this.#tripContainer);
     } else {
       render(new SortView(), this.#tripContainer);
       render(this.#pointsListComponent, this.#tripContainer);
